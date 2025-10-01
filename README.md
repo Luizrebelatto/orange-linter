@@ -11,6 +11,16 @@
 - No console.log
 - No empty functions
 
+### How to run
+- Run file with anti patterns
+```
+node index.js example.js 
+```
+- Run file without anti patterns
+```
+ node index.js exampleCorrect.js 
+```
+
 ### Demo
 
 
