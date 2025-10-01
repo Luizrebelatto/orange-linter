@@ -51,8 +51,11 @@ if (results.length === 0) {
   console.log('\x1b[32m%s\x1b[0m', '✅ All tests passed ✅');
 
 } else {
+  console.log("🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊 LINTER REPORT 🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊🍊")
+  console.log(" ")
   results.forEach(issue => {
-    console.log(`${issue.file}`);
+    console.log(" ")
+    console.log(`\x1b[90m${issue.file}\x1b[0m`);
     console.log(`\x1b[38;5;208m Line ${issue.line}:\x1b[0m ❌ ${issue.message}`);
   });
 }
