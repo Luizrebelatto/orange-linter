@@ -1,7 +1,7 @@
 export function check(code, ast, filePath) {
   const issues = [];
 
-  function traverse(node) {
+  function checkFunction(node) {
     if (!node) return;
 
     if (
@@ -20,14 +20,14 @@ export function check(code, ast, filePath) {
     for (const key in node) {
       if (node[key] && typeof node[key] === "object") {
         if (Array.isArray(node[key])) {
-          node[key].forEach(traverse);
+          node[key].forEach(checkFunction);
         } else {
-          traverse(node[key]);
+          checkFunction(node[key]);
         }
       }
     }
   }
 
-  traverse(ast);
+  checkFunction(ast);
   return issues;
 }

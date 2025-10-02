@@ -1,7 +1,8 @@
 export function check(code, ast, filePath) {
   const issues = [];
-
+  console.log(ast.tokens)
   ast.tokens.forEach((token, i) => {
+    
     if (
       token.type === "Identifier" &&
       token.value === "console" &&
@@ -18,3 +19,5 @@ export function check(code, ast, filePath) {
 
   return issues;
 }
+
+// Identifier means its function
