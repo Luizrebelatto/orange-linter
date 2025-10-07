@@ -1,6 +1,5 @@
 export function check(code, ast, filePath) {
   const issues = [];
-  console.log(ast.tokens)
   ast.tokens.forEach((token, i) => {
     
     if (
@@ -19,5 +18,3 @@ export function check(code, ast, filePath) {
 
   return issues;
 }
-
-// Identifier means its function

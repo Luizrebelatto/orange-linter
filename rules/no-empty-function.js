@@ -1,14 +1,12 @@
 export function check(code, ast, filePath) {
   const issues = [];
 
-  function checkFunction(node) {
-    if (!node) return;
+  const walk = (node) => {
+    if (!node || typeof node !== "object") return;
 
-    if (
-      (node.type === "FunctionDeclaration" || node.type === "FunctionExpression" || node.type === "ArrowFunctionExpression") &&
-      node.body.type === "BlockStatement" &&
-      node.body.body.length === 0
-    ) {
+    const typeOfFunction = ["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]
+
+    if (typeOfFunction.includes(node.type) && node.body?.type === "BlockStatement" && node.body.body.length === 0) {
       issues.push({
         message: "\x1b[31mEmpty function detected\x1b[0m",
         line: node.loc.start.line,
@@ -17,17 +15,12 @@ export function check(code, ast, filePath) {
       });
     }
 
-    for (const key in node) {
-      if (node[key] && typeof node[key] === "object") {
-        if (Array.isArray(node[key])) {
-          node[key].forEach(checkFunction);
-        } else {
-          checkFunction(node[key]);
-        }
-      }
+    for (const value of Object.values(node)) {
+      if (Array.isArray(value)) value.forEach(walk);
+      else walk(value);
     }
-  }
+  };
 
-  checkFunction(ast);
+  walk(ast);
   return issues;
 }
