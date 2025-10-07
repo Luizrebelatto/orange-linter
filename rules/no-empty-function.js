@@ -1,7 +1,7 @@
 export function check(code, ast, filePath) {
   const issues = [];
 
-  const walk = (node) => {
+  const readAst = (node) => {
     if (!node || typeof node !== "object") return;
 
     const typeOfFunction = ["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]
@@ -16,11 +16,14 @@ export function check(code, ast, filePath) {
     }
 
     for (const value of Object.values(node)) {
-      if (Array.isArray(value)) value.forEach(walk);
-      else walk(value);
+      if (Array.isArray(value)) {
+        value.forEach(readAst)
+      } else { 
+        readAst(value)
+      }
     }
   };
 
-  walk(ast);
+  readAst(ast);
   return issues;
 }
