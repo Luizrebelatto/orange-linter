@@ -1,5 +1,5 @@
 export function check(code, ast, filePath) {
-  const declared = new Set();
+  const declared = new Map();
   const used = new Set();
   const issues = [];
 
@@ -7,7 +7,8 @@ export function check(code, ast, filePath) {
     if (!node || typeof node !== "object") return;
 
     if(node.type === "VariableDeclarator" && node.id?.name) {
-        declared.add(node.id.name)
+        const line = node.loc?.start?.line || 0;
+        declared.set(node.id.name, line)
         return;
     } 
 
@@ -28,11 +29,21 @@ export function check(code, ast, filePath) {
 
   checkVars(ast);
 
-  for (const name of declared) {
+//   for (const name of declared) {
+//     if (!used.has(name)) {
+//       issues.push({
+//         message: `\x1b[31mVariable '${name}' declared but never used\x1b[0m`,
+//         file: filePath,
+//         line: token.loc.start.line,
+//       });
+//     }
+//   }
+for (const [name, line] of declared.entries()) {
     if (!used.has(name)) {
       issues.push({
         message: `\x1b[31mVariable '${name}' declared but never used\x1b[0m`,
         file: filePath,
+        line: line,
       });
     }
   }
