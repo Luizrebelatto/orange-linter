@@ -6,17 +6,15 @@ export function checkUnusedVariables(code, ast, filePath) {
   function traverse(node) {
     if (!node || typeof node !== "object") return;
 
-    switch (node.type) {
-      case "VariableDeclarator":
-        if (node.id?.name) {
-          declared.add(node.id.name);
-        }
-        break;
+    if(node.type === "VariableDeclarator" && node.id?.name) {
+        declared.add(node.id.name)
+        return;
+    } 
 
-      case "Identifier":
+    if(node.type === "Identifier") {
         used.add(node.name);
-        break;
-    }
+        return;
+    } 
 
     for (const value of Object.values(node)) {
       if (Array.isArray(value)) value.forEach(traverse);
