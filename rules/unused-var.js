@@ -29,16 +29,7 @@ export function check(code, ast, filePath) {
 
   checkVars(ast);
 
-//   for (const name of declared) {
-//     if (!used.has(name)) {
-//       issues.push({
-//         message: `\x1b[31mVariable '${name}' declared but never used\x1b[0m`,
-//         file: filePath,
-//         line: token.loc.start.line,
-//       });
-//     }
-//   }
-for (const [name, line] of declared.entries()) {
+  for (const [name, line] of declared.entries()) {
     if (!used.has(name)) {
       issues.push({
         message: `\x1b[31mVariable '${name}' declared but never used\x1b[0m`,
