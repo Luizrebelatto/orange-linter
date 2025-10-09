@@ -1,15 +1,17 @@
 export function check(code, ast, filePath) {
-  const functionDeclared = new Set();
+  const functionDeclared = new Map();
   const functionsCalled = new Set();
   const issues = [];
 
-  function traverse(node) {
+  function checkFunctions(node) {
     if (!node || typeof node !== "object") return;
+    const line = node.loc?.start?.line || 0;
+    const nameOfFunction = node.id?.name
 
     switch (node.type) {
       case "FunctionDeclaration":
-        if (node.id?.name) {
-            functionDeclared.add(node.id.name)
+        if (nameOfFunction) {
+            functionDeclared.set(node.id.name, line)
         };
         break;
 
@@ -17,9 +19,9 @@ export function check(code, ast, filePath) {
         if (
           (node.init?.type === "FunctionExpression" ||
            node.init?.type === "ArrowFunctionExpression") &&
-          node.id?.name
+          nameOfFunction
         ) {
-          functionDeclared.add(node.id.name);
+          functionDeclared.set(nameOfFunction, line);
         }
         break;
 
@@ -31,18 +33,18 @@ export function check(code, ast, filePath) {
     }
 
     for (const value of Object.values(node)) {
-      if (Array.isArray(value)) value.forEach(traverse);
-      else if (typeof value === "object") traverse(value);
+      if (Array.isArray(value)) value.forEach(checkFunctions);
+      else if (typeof value === "object") checkFunctions(value);
     }
   }
 
-  traverse(ast);
+  checkFunctions(ast);
 
-  for (const name of functionDeclared) {
+  for (const [name, line] of functionDeclared) {
     if (!functionsCalled.has(name)) {
       issues.push({
         message: `\x1b[31mFunction '${name}' declared but never used\x1b[0m`,
-        
+        line: line,
         file: filePath,
       });
     }
