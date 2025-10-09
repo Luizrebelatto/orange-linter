@@ -4,8 +4,8 @@ import * as noVar from "./rules/no-var.js";
 import * as maxLineLength from "./rules/max-line-length.js";
 import * as noConsole from "./rules/no-console.js";
 import * as noEmptyFunction from "./rules/no-empty-function.js";
-import * as noUnusedVar from "./rules/unused-var";
-import * as noUnusedFunction from "./rules/unused-function";
+import * as noUnusedVar from "./rules/unused-var.js";
+import * as noUnusedFunction from "./rules/unused-function.js";
 
 const rules = [noVar, maxLineLength, noConsole, noEmptyFunction, noUnusedVar, noUnusedFunction];
 

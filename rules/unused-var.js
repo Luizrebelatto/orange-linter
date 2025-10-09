@@ -1,9 +1,9 @@
-export function checkUnusedVariables(code, ast, filePath) {
+export function check(code, ast, filePath) {
   const declared = new Set();
   const used = new Set();
   const issues = [];
 
-  function traverse(node) {
+  function checkVars(node) {
     if (!node || typeof node !== "object") return;
 
     if(node.type === "VariableDeclarator" && node.id?.name) {
@@ -17,17 +17,21 @@ export function checkUnusedVariables(code, ast, filePath) {
     } 
 
     for (const value of Object.values(node)) {
-      if (Array.isArray(value)) value.forEach(traverse);
-      else if (typeof value === "object") traverse(value);
+      if (Array.isArray(value)) {
+        value.forEach(checkVars);
+      }
+      else if (typeof value === "object") {
+        checkVars(value)
+      };
     }
   }
 
-  traverse(ast);
+  checkVars(ast);
 
   for (const name of declared) {
     if (!used.has(name)) {
       issues.push({
-        message: `Variable '${name}' declared but never used`,
+        message: `\x1b[31mVariable '${name}' declared but never used\x1b[0m`,
         file: filePath,
       });
     }

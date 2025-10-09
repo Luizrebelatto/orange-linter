@@ -41,7 +41,7 @@ export function check(code, ast, filePath) {
   for (const name of functionDeclared) {
     if (!functionsCalled.has(name)) {
       issues.push({
-        message: `Function '${name}' declared but never used`,
+        message: `\x1b[31mFunction '${name}' declared but never used\x1b[0m`,
         file: filePath,
       });
     }
