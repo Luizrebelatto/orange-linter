@@ -4,7 +4,7 @@ import { lintFile } from "./linter.js";
 // extra args process.argv[2]
 const file = process.argv[2];
 if (!file) {
-  console.error("Uso: node index.js <arquivo>");
+  console.error("How to use: node index.js <arquivo>");
   process.exit(1);
 }
 
