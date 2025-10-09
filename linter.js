@@ -4,8 +4,10 @@ import * as noVar from "./rules/no-var.js";
 import * as maxLineLength from "./rules/max-line-length.js";
 import * as noConsole from "./rules/no-console.js";
 import * as noEmptyFunction from "./rules/no-empty-function.js";
+import * as noUnusedVar from "./rules/unused-var";
+import * as noUnusedFunction from "./rules/unused-function";
 
-const rules = [noVar, maxLineLength, noConsole, noEmptyFunction];
+const rules = [noVar, maxLineLength, noConsole, noEmptyFunction, noUnusedVar, noUnusedFunction];
 
 export function lintFile(filePath) {
   const code = fs.readFileSync(filePath, "utf-8");
