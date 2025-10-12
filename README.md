@@ -10,6 +10,8 @@
 - No var
 - No console.log
 - No empty functions
+- Unused functions
+- Unused Vars
 
 ### How to run
 - Run file with anti patterns
