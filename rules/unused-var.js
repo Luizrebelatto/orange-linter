@@ -76,9 +76,12 @@ export function check(code, ast, filePath) {
       }
 
       for (const value of Object.values(node)) {
-        if (Array.isArray(value)) value.forEach(traverse);
-        else if (typeof value === "object") traverse(value);
+        if (Array.isArray(value)) {
+          value.forEach(traverse);
+        } else if (typeof value === "object") {
+          traverse(value);
       }
+        }
 
       popScope();
       return;
@@ -96,8 +99,11 @@ export function check(code, ast, filePath) {
     }
 
     for (const value of Object.values(node)) {
-      if (Array.isArray(value)) value.forEach(traverse);
-      else if (typeof value === "object") traverse(value);
+      if (Array.isArray(value)){
+        value.forEach(traverse);
+      } else if (typeof value === "object") {
+        traverse(value);
+      }
     }
   }
 
