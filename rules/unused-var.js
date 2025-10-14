@@ -12,12 +12,12 @@ export function check(code, ast, filePath) {
   }
 
   function popScope() {
-    const current = scopeStack.pop();
+    const currentElement = scopeStack.pop();
     const parent = scopeStack[scopeStack.length - 1];
 
-    for (const [name, line] of current.declared.entries()) {
+    for (const [name, line] of currentElement.declared.entries()) {
       const usedInCurrentOrChild =
-        current.used.has(name) || parent?.used.has(name);
+        currentElement.used.has(name) || parent?.used.has(name);
       if (!usedInCurrentOrChild) {
         issues.push({
           message: `\x1b[31m'${name}' is declared but its value is never read\x1b[0m`,
@@ -28,15 +28,15 @@ export function check(code, ast, filePath) {
     }
 
     if (parent) {
-      for (const usedVar of current.used) {
+      for (const usedVar of currentElement.used) {
         parent.used.add(usedVar);
       }
     }
   }
 
   function declareVariable(name, line) {
-    const current = scopeStack[scopeStack.length - 1];
-    current.declared.set(name, line);
+    const currentElement = scopeStack[scopeStack.length - 1];
+    currentElement.declared.set(name, line);
   }
 
   function useVariable(name) {
