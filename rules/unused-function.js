@@ -2,7 +2,6 @@ export function check(code, ast, filePath) {
   const issues = [];
   const scopeStack = [];
 
-  // Cria novo escopo
   function enterScope() {
     scopeStack.push({
       functionsDeclared: new Map(),
@@ -10,7 +9,6 @@ export function check(code, ast, filePath) {
     });
   }
 
-  // Sai do escopo, valida funções não usadas e propaga chamadas
   function exitScope() {
     const scope = scopeStack.pop();
     if (!scope) return;
@@ -41,17 +39,13 @@ export function check(code, ast, filePath) {
     if (!node || typeof node !== "object") return;
     const line = node.loc?.start?.line || 0;
 
-    // Entra em novo escopo
-    switch (node.type) {
-      case "Program":
-      case "BlockStatement":
-      case "FunctionDeclaration":
-      case "FunctionExpression":
-      case "ArrowFunctionExpression":
-        enterScope();
-        break;
-    }
+    const newScope = ["Program", "BlockStatement", "FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]
 
+    if(newScope.includes(node.type)){
+      enterScope();
+      return;
+    }
+  
     switch (node.type) {
       case "FunctionDeclaration": {
         const name = node.id?.name;
@@ -81,11 +75,13 @@ export function check(code, ast, filePath) {
     }
 
     for (const value of Object.values(node)) {
-      if (Array.isArray(value)) value.forEach(checkFunctions);
-      else if (typeof value === "object") checkFunctions(value);
+      if (Array.isArray(value)) {
+        value.forEach(checkFunctions)
+      } else if (typeof value === "object") {
+        checkFunctions(value);
+      }
     }
 
-    // Sai do escopo e valida
     switch (node.type) {
       case "Program":
       case "BlockStatement":
