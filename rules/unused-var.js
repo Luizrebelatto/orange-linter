@@ -1,6 +1,6 @@
 export function check(code, ast, filePath) {
   const issues = [];
-  const GLOBALS = new Set(["console", "window", "document", "global", "process"]);
+  const globalElements = new Set(["console", "window", "document", "global", "process"]);
 
   const scopeStack = [];
 
@@ -40,7 +40,7 @@ export function check(code, ast, filePath) {
   }
 
   function useVariable(name) {
-    if (GLOBALS.has(name)) return;
+    if (globalElements.has(name)) return;
     for (let i = scopeStack.length - 1; i >= 0; i--) {
       if (scopeStack[i].declared.has(name)) {
         scopeStack[i].used.add(name);
@@ -52,15 +52,9 @@ export function check(code, ast, filePath) {
 
   function traverse(node) {
     if (!node || typeof node !== "object") return;
-
-    if (
-      node.type === "Program" ||
-      node.type === "BlockStatement" ||
-      node.type === "FunctionDeclaration" ||
-      node.type === "FunctionExpression" ||
-      node.type === "ArrowFunctionExpression" ||
-      node.type === "CatchClause"
-    ) {
+    const structuresFunctionAST = ["Program", "BlockStatement", "FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"];
+    
+    if (structuresFunctionAST.includes(node.type)) {
       pushScope();
 
       if (node.params) {
@@ -80,8 +74,8 @@ export function check(code, ast, filePath) {
           value.forEach(traverse);
         } else if (typeof value === "object") {
           traverse(value);
-      }
         }
+      }
 
       popScope();
       return;
