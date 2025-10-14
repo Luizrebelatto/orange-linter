@@ -11,7 +11,9 @@
 - No console.log
 - No empty functions
 - Unused functions
+ - Check if functions are called and check scopes
 - Unused Vars
+ - Check if variables are called according scope
 
 ### How to run
 - Run file with anti patterns
