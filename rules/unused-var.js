@@ -50,7 +50,7 @@ export function check(code, ast, filePath) {
   }
 
 
-  function traverse(node) {
+  function inspect(node) {
     if (!node || typeof node !== "object") return;
     const structuresFunctionAST = ["Program", "BlockStatement", "FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"];
     
@@ -71,9 +71,9 @@ export function check(code, ast, filePath) {
 
       for (const value of Object.values(node)) {
         if (Array.isArray(value)) {
-          value.forEach(traverse);
+          value.forEach(inspect);
         } else if (typeof value === "object") {
-          traverse(value);
+          inspect(value);
         }
       }
 
@@ -83,7 +83,7 @@ export function check(code, ast, filePath) {
 
     if (node.type === "VariableDeclarator" && node.id?.name) {
       declareVariable(node.id.name, node.loc?.start?.line || 0);
-      traverse(node.init);
+      inspect(node.init);
       return;
     }
 
@@ -94,15 +94,15 @@ export function check(code, ast, filePath) {
 
     for (const value of Object.values(node)) {
       if (Array.isArray(value)){
-        value.forEach(traverse);
+        value.forEach(inspect);
       } else if (typeof value === "object") {
-        traverse(value);
+        inspect(value);
       }
     }
   }
 
   pushScope();
-  traverse(ast);
+  inspect(ast);
   popScope();
 
   return issues;
