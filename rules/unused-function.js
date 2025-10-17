@@ -82,14 +82,9 @@ export function check(code, ast, filePath) {
       }
     }
 
-    switch (node.type) {
-      case "Program":
-      case "BlockStatement":
-      case "FunctionDeclaration":
-      case "FunctionExpression":
-      case "ArrowFunctionExpression":
-        exitScope();
-        break;
+    if(newScope.includes(node.type)){
+      exitScope();
+      return;
     }
   }
 
