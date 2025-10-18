@@ -16,8 +16,7 @@ export function check(code, ast, filePath) {
     const parent = scopeStack[scopeStack.length - 1];
 
     for (const [name, line] of currentElement.declared.entries()) {
-      const usedInCurrentOrChild =
-        currentElement.used.has(name) || parent?.used.has(name);
+      const usedInCurrentOrChild = currentElement.used.has(name) || parent?.used.has(name);
       if (!usedInCurrentOrChild) {
         issues.push({
           message: `\x1b[31m'${name}' is declared but its value is never read\x1b[0m`,
